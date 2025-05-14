@@ -1,0 +1,56 @@
+services:
+  # Servicio para la base de datos MySQL
+  db:
+    image: mysql:8
+    container_name: mysql-inventario
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: herwingx-dev
+      MYSQL_DATABASE: inventario_ips
+    ports:
+      - "3306:3306"
+    volumes:
+      - inventario-data:/var/lib/mysql
+    networks:
+      - inventario-network
+
+  # Servicio para el backend (Express)
+  backend:
+    build: ./backend
+    container_name: inventario-backend
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    restart: always
+    networks:
+      - inventario-network
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=herwingx-dev
+      - DB_NAME=inventario_ips
+      - JWT_SECRET=mysecretkey
+      - JWT_EXPIRES_IN=3600
+
+  # Servicio para el frontend (Nginx o un contenedor estático con tu HTML)
+  frontend:
+    build: ./frontend
+    container_name: inventario-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    restart: always
+    networks:
+      - inventario-network
+
+volumes:
+  inventario-data:
+
+networks:
+  inventario-network:
+    driver: bridge
