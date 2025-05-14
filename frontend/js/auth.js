@@ -11,7 +11,7 @@ async function login() {
   const data = await res.json();
   if (res.ok) {
     localStorage.setItem('token', data.token);
-    window.location.href = 'dashboard.html';
+    window.location.href = '/dashboard';
   } else {
     alert(data.message || 'Login fallido');
   }

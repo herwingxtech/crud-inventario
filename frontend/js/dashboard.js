@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (!token) {
     // No hay token, redirigir al login
-    window.location.href = '/login.html';
+    window.location.href = '/login';
   }
 
   // Aquí podrías hacer una verificación opcional al backend si deseas validar el token
@@ -19,5 +19,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function logout() {
   localStorage.removeItem('token');
-  window.location.href = 'login.html';
+  window.location.href = '/login';
 }
